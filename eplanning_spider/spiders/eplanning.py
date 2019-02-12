@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from scrapy.http import Request
+from scrapy.http import Request, FormRequest
 
 
 class EplanningSpider(scrapy.Spider):
@@ -21,4 +21,11 @@ class EplanningSpider(scrapy.Spider):
         yield Request(response.urljoin(app_url),callback=self.parse_form)
 
     def parse_form(self,response):
+        yield FormRequest.from_response(response,
+                                                formdata={'RdoTimeLimit':'42'},
+                                                dont_filter=True,
+                                                formxpath='(//form)[2]',
+                                                callback=self.parse_pages)
+
+    def parse_pages(self,response):
         pass
