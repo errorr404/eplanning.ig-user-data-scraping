@@ -17,4 +17,8 @@ class EplanningSpider(scrapy.Spider):
                 yield Request(url,callback=self.parse_application)
 
     def parse_application(self,response):
+        app_url = response.xpath('//*[@class="glyphicon glyphicon-inbox btn-lg"]/following-sibling::a/@href').extract_first()
+        yield Request(response.urljoin(app_url),callback=self.parse_form)
+
+    def parse_form(self,response):
         pass
